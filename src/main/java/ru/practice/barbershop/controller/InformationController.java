@@ -35,7 +35,7 @@ public class InformationController {
         if (currentDay == null) {
             return day + " not found";
         }
-        return scheduleService.getCurrentDay(day);
+        return currentDay;
     }
 
 
