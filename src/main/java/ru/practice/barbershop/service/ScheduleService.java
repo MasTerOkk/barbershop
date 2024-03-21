@@ -1,87 +1,51 @@
 package ru.practice.barbershop.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practice.barbershop.conf.MyDayOfWeek;
+import ru.practice.barbershop.repository.ScheduleRepository;
 
-import java.io.*;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Properties;
 
+
+/**
+ * This is service class for maintain the schedule
+ */
 @Service
-//TODO Доделать расписание для каждого дня недели
-//TODO Сделать общее расписания
+@AllArgsConstructor
 public class ScheduleService {
 
 
-    private Properties properties;
+    private final ScheduleRepository scheduleRepository;
 
-    private final String configFilePath= "src/main/resources/schedule.properties";
-
-    public ScheduleService() {
-        File ConfigFile=new File(configFilePath);
-        try {
-            FileInputStream configFileReader=new FileInputStream(ConfigFile);
-            properties = new Properties();
-            try {
-                properties.load(configFileReader);
-                configFileReader.close();
-            } catch (IOException e)
-            {
-                System.out.println(e.getMessage());
-            }
-        }  catch (FileNotFoundException e)
-        {
-            System.out.println(e.getMessage());
-            throw new RuntimeException("config.properties not found at config file path " + configFilePath);
-        }
+    //TODO подумать как можно преобразовать строку в MyDayOfWeek.param
+    /**
+     * This is a function to get the current day
+     * @Param day The <code>String</code> variable witch represents the day of the week
+     */
+    public String getCurrentDay(String day) {
+        return getScheduleOfWeek().get(day.toLowerCase());
     }
 
-    //TODO Переделать с LocalTime на строки
-    public HashMap<String, LocalTime> getMonday() {
-        String mondayStart= properties.getProperty("week.monday.start");
-        String mondayEnd= properties.getProperty("week.monday.end");
+    /**
+     * This is a function for getting the weekly schedule
+     */
+    public HashMap<String, String> getScheduleOfWeek() {
 
-        if(mondayStart != null && mondayEnd != null) {
+        HashMap<String, String> schedule = new HashMap<>();
 
-            String[] mondayParseStart = mondayStart.split(":");
-            if (mondayParseStart[0].length() < 2) {
-                mondayParseStart[0] = "0" + mondayParseStart[0];
-            }
-            if (mondayParseStart[1].length() < 2) {
-                mondayParseStart[1] = "0" + mondayParseStart[1];
-            }
+        schedule.put("monday", scheduleRepository.getDay(MyDayOfWeek.monday));
+        schedule.put("tuesday", scheduleRepository.getDay(MyDayOfWeek.tuesday));
+        schedule.put("wednesday", scheduleRepository.getDay(MyDayOfWeek.wednesday));
+        schedule.put("thursday", scheduleRepository.getDay(MyDayOfWeek.thursday));
+        schedule.put("friday", scheduleRepository.getDay(MyDayOfWeek.friday));
+        schedule.put("saturday", scheduleRepository.getDay(MyDayOfWeek.saturday));
+        schedule.put("sunday", scheduleRepository.getDay(MyDayOfWeek.sunday));
 
-            mondayStart = mondayParseStart[0] + ":" + mondayParseStart[1];
-
-            String[] mondayParseEnd = mondayEnd.split(":");
-            if (mondayParseEnd[0].length() < 2) {
-                mondayParseEnd[0] = "0" + mondayParseEnd[0];
-            }
-            if (mondayParseEnd[1].length() < 2) {
-                mondayParseEnd[1] = "0" + mondayParseEnd[1];
-            }
-
-            mondayEnd = mondayParseEnd[0] + ":" + mondayParseEnd[1];
-
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_TIME;
-                LocalTime start = LocalTime.parse(mondayStart,formatter);
-                LocalTime end = LocalTime.parse(mondayEnd,formatter);
-                HashMap<String, LocalTime> monday = new HashMap<>();
-
-                monday.put("start", start);
-                monday.put("end", end);
-
-                return monday;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                throw new RuntimeException("Wrong data from property file");
-            }
-        }
-        else
-            throw new RuntimeException("Application url not specified in the config.properties file.");
+        return schedule;
     }
+
+
+
 
 }
