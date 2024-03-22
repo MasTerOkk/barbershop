@@ -1,4 +1,4 @@
-package ru.practice.barbershop.conf;
+package ru.practice.barbershop.general;
 
 /**
  * This is enum class that represents the days of the week

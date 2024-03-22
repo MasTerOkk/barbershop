@@ -2,6 +2,7 @@ package ru.practice.barbershop.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.practice.barbershop.general.BarberStatus;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class Barber {
     private Long id;
     private String phone;
     private String email;
+    private BarberStatus barberStatus;
 
     @OneToMany(mappedBy = "barber")
     private List<Order> orders;

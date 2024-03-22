@@ -2,7 +2,7 @@ package ru.practice.barbershop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practice.barbershop.conf.MyDayOfWeek;
+import ru.practice.barbershop.general.MyDayOfWeek;
 import ru.practice.barbershop.repository.ScheduleRepository;
 
 import java.util.HashMap;

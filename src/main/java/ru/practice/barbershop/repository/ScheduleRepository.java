@@ -1,7 +1,7 @@
 package ru.practice.barbershop.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.practice.barbershop.conf.MyDayOfWeek;
+import ru.practice.barbershop.general.MyDayOfWeek;
 
 import java.io.File;
 import java.io.FileInputStream;

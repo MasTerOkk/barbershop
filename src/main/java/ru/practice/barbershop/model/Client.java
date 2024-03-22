@@ -23,6 +23,7 @@ public class Client {
     private String name;
     private String phone;
     private String password;
+    private Boolean deleted;
 
     @OneToMany(mappedBy = "client")
     private List<Registration> registrationList;
