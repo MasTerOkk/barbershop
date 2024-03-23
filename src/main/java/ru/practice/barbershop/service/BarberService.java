@@ -6,7 +6,6 @@ import ru.practice.barbershop.general.MyService;
 import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.repository.BarberRepository;
 
-import java.util.Optional;
 /**
  * This is service class for maintain the barber entity
  */
@@ -23,11 +22,11 @@ public class BarberService implements MyService<Barber> {
     @Override
     public Barber getById(Long id) {
         return barberRepository.getBarberById(id)
-                .orElseThrow(() -> new RuntimeException("User with id " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException("Barber with id=" + id + " not found."));
     }
 
     /**
-     * Save entity in db
+     * Save or change entity in db
      * @param barber entity object
      */
     @Override

@@ -1,6 +1,5 @@
 package ru.practice.barbershop.general;
 
-import java.util.Optional;
 
 /**
  * This is interface witch represents general logic of service
@@ -8,11 +7,11 @@ import java.util.Optional;
  */
 public interface MyService<T> {
 
-    /**
-     * Get entity with all collections
-     * @param id entity id
-     * @return Entity
-     */
+//    /**
+//     * Get entity with all collections
+//     * @param id entity id
+//     * @return Entity
+//     */
 //    T getByIdAllCollections(Long id);
     /**
      * Get entity without collections
@@ -25,6 +24,6 @@ public interface MyService<T> {
      * Save or update entity to database
      * @param entity entity object
      */
-    void save(T entity);
+    void save(T entity) throws RuntimeException;
 
 }
