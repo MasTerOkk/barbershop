@@ -31,11 +31,11 @@ public class Order {
     private String clientName;
     private String phone;
     //Evaluation of the order by the client 0 to 5 star
-    private Byte feedback;
+    private Byte mark;
     @ManyToOne
-    @JoinColumn(name = "barberId")
+    @JoinColumn(name = "barber_id")
     private Barber barber;
     @ManyToOne
-    @JoinColumn(name = "clientId")
+    @JoinColumn(name = "client_id")
     private Client client;
 }

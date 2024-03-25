@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-barber
+      author: David
+      changes:
+        - createTable:
+            tableName: barber
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: barber_status
+                  type: smallint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+                  constraints:
+                    nullable: false

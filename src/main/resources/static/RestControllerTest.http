@@ -1,0 +1,15 @@
+POST http://localhost:8080/reg/registration?clientId=1&time=15:00&day=2024-01-01
+Content-Type: application/x-www-form-urlencoded
+
+###
+POST http://localhost:8080/reg/cancel?time=15:00&day=2024-01-01
+
+###
+POST http://localhost:8080/barber/create
+Content-Type: application/json
+
+{
+  "phone": "8901",
+  "email": "newBarber4000@mail.com",
+  "barberStatus": "VACATION"
+}

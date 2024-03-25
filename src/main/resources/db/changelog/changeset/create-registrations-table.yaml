@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-registrations
+      author: David
+      changes:
+        - createTable:
+            tableName: registrations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: canceled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: time(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: client_fk_id
+                    referencedTableName: client
+                    referencedColumnNames: id
