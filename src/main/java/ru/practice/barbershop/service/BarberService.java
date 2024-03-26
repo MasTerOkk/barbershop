@@ -2,7 +2,8 @@ package ru.practice.barbershop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practice.barbershop.general.MyService;
+import ru.practice.barbershop.dto.BarberDto;
+import ru.practice.barbershop.mapper.BarberMapper;
 import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.repository.BarberRepository;
 
@@ -11,26 +12,35 @@ import ru.practice.barbershop.repository.BarberRepository;
  */
 @Service
 @AllArgsConstructor
-public class BarberService implements MyService<Barber> {
+public class BarberService {
     private final BarberRepository barberRepository;
+
+    /**
+     * Return Barber entity by his id
+     * @param id entity id
+     * @return Barber dto
+     */
+    public BarberDto getDtoById(Long id) {
+        return BarberMapper.toDto(barberRepository.getBarberById(id)
+                .orElseThrow(() -> new RuntimeException("Barber with id=" + id + " not found.")));
+    }
 
     /**
      * Return Barber entity by his id
      * @param id entity id
      * @return Barber entity
      */
-    @Override
-    public Barber getById(Long id) {
+    public Barber getEntityById(Long id) {
         return barberRepository.getBarberById(id)
                 .orElseThrow(() -> new RuntimeException("Barber with id=" + id + " not found."));
     }
 
     /**
      * Save or change entity in db
-     * @param barber entity object
+     * @param dto entity object
      */
-    @Override
-    public void save(Barber barber) {
-        barberRepository.save(barber);
+    public BarberDto save(BarberDto dto) {
+        Barber savedBarber = barberRepository.save(BarberMapper.toEntity(dto));
+        return BarberMapper.toDto(savedBarber);
     }
 }

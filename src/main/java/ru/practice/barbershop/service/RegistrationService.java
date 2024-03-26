@@ -2,7 +2,9 @@ package ru.practice.barbershop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practice.barbershop.general.MyService;
+import ru.practice.barbershop.dto.RegistrationsDto;
+import ru.practice.barbershop.mapper.RegistrationsMapper;
+import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.model.Client;
 import ru.practice.barbershop.model.Registration;
 import ru.practice.barbershop.repository.RegistrationRepository;
@@ -17,15 +19,15 @@ import java.util.List;
  */
 @Service
 @AllArgsConstructor
-public class RegistrationService implements MyService<Registration> {
+public class RegistrationService {
     private final RegistrationRepository registrationRepository;
     private final ClientService clientService;
+    private final BarberService barberService;
     /**
      * Return Registration entity by his id
      * @param id entity id
      * @return Registration entity
      */
-    @Override
     public Registration getById(Long id) {
         return registrationRepository.getRegistrationById(id)
                 .orElseThrow(() -> new RuntimeException("Registration with id=" + id + " not found."));
@@ -34,20 +36,25 @@ public class RegistrationService implements MyService<Registration> {
 
     /**
      * Save entity in db
-     * @param entity Registration entity object
+     * @param dto Registration dto object
      * @throws RuntimeException Registration has already been created
      */
-    @Override
-    public void save(Registration entity) throws RuntimeException {
+    public RegistrationsDto save(RegistrationsDto dto) throws RuntimeException {
+
+        Registration entity = RegistrationsMapper.toEntity(dto);
+
         List<Registration> registrationList = registrationRepository.
                 getRegistrationsByTimeAndDay(entity.getTime(),entity.getDay());
+
         for (Registration registration: registrationList) {
             if (!registration.getCanceled()) {
                 throw new RuntimeException("Registration on " + entity.getDay() +
                         " " + entity.getTime() + " has already been created.");
             }
         }
-        registrationRepository.save(entity);
+
+        Registration registration = registrationRepository.save(entity);
+        return RegistrationsMapper.toDto(registration);
     }
 
     /**
@@ -56,7 +63,7 @@ public class RegistrationService implements MyService<Registration> {
      * @param date The date of registration
      * @throws RuntimeException Registration not found
      */
-    public void canceled(LocalTime time, LocalDate date) throws RuntimeException {
+    public RegistrationsDto canceled(LocalTime time, LocalDate date) throws RuntimeException {
         List<Registration> registrationList = registrationRepository.
                 getRegistrationsByTimeAndDay(time,date);
         if (registrationList != null) {
@@ -64,27 +71,30 @@ public class RegistrationService implements MyService<Registration> {
                 if (!registration.getCanceled()) {
                     registration.setCanceled(Boolean.TRUE);
                     registrationRepository.save(registration);
-                    break;
+                    return RegistrationsMapper.toDto(registration);
                 }
             }
-        } else {
-            throw new RuntimeException("Registration on " + date +
-                    " " + time + " not found.");
         }
+        throw new RuntimeException("Registration on " + date +
+                " " + time + " not found.");
+
     }
 
     /**
-     * For link Registration to Client and get basic initialization
+     * For link Registration to Client, Barber and get basic initialization
      * @param time The time of registration
      * @param date The date of registration
      * @param clientId The client who registering
-     * @return Registration entity link to the client
+     * @param barberId The barber
+     * @return RegistrationDto obj link to the client and barber
      */
-    public Registration setClient(LocalTime time, LocalDate date, Long clientId) {
-        Client client = clientService.getById(clientId);
+    public RegistrationsDto setClient(LocalTime time, LocalDate date, Long clientId, Long barberId) {
+        Client client = clientService.getEntityById(clientId);
+        Barber barber = barberService.getEntityById(barberId);
         Registration registration = new Registration();
 
         registration.setClient(client);
+        registration.setBarber(barber);
         registration.setRegistrationTime(LocalDateTime.now());
         registration.setPhone(client.getPhone());
         registration.setClientName(client.getName());
@@ -92,6 +102,6 @@ public class RegistrationService implements MyService<Registration> {
         registration.setDay(date);
         registration.setTime(time);
 
-        return registration;
+        return RegistrationsMapper.toDto(registration);
     }
 }

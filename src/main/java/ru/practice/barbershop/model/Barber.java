@@ -25,5 +25,7 @@ public class Barber {
     private BarberStatus barberStatus;
 
     @OneToMany(mappedBy = "barber")
-    private List<Order> orders;
+    private List<Order> orderList;
+    @OneToMany(mappedBy = "barber")
+    private List<Registration> registrationList;
 }

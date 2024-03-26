@@ -1,9 +1,11 @@
 package ru.practice.barbershop.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practice.barbershop.dto.BarberDto;
 import ru.practice.barbershop.general.BarberStatus;
-import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.service.BarberService;
 
 /**
@@ -23,14 +25,13 @@ public class BarberController {
      */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public String saveBarber(
-            @RequestBody Barber barber
-    ) {
+    public ResponseEntity<BarberDto> createBarber(@RequestBody BarberDto barber) {
         try {
-            barberService.save(barber);
-            return "Barber saved";
+            BarberDto savedBarber = barberService.save(barber);
+            return new ResponseEntity<>(savedBarber, HttpStatus.OK);
         } catch (Exception e) {
-            return "Wrong data";
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -40,19 +41,20 @@ public class BarberController {
      * @param status new status for Barber
      * @return Answer
      */
-    @RequestMapping(value = "/change", method = RequestMethod.POST)
+    @RequestMapping(value = "/change", method = RequestMethod.GET)
     @ResponseBody
-    public String changeStatus (
+    public ResponseEntity<BarberDto> changeStatus (
             @RequestParam(name = "id") Long id,
             @RequestParam(name = "status") String status
             ) {
         try {
-            Barber barber = barberService.getById(id);
+            BarberDto barber = barberService.getDtoById(id);
             barber.setBarberStatus(BarberStatus.valueOf(status.toUpperCase()));
             barberService.save(barber);
-            return "Barber changed";
+            return new ResponseEntity<>(barber, HttpStatus.OK);
         } catch (Exception e) {
-            return "Wrong data";
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

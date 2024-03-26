@@ -1,8 +1,10 @@
 package ru.practice.barbershop.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practice.barbershop.model.Registration;
+import ru.practice.barbershop.dto.RegistrationsDto;
 import ru.practice.barbershop.service.RegistrationService;
 
 import java.time.LocalDate;
@@ -27,16 +29,19 @@ public class RegistrationController {
      */
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     @ResponseBody
-    public String register(@RequestParam(name = "time") LocalTime time,
-                           @RequestParam(name = "day") LocalDate day,
-                           @RequestParam(name = "clientId") Long clientId) {
+    public ResponseEntity<RegistrationsDto> register(
+              @RequestParam(name = "time") LocalTime time,
+              @RequestParam(name = "day") LocalDate day,
+              @RequestParam(name = "clientId") Long clientId,
+              @RequestParam(name = "barberId") Long barberId) {
         try {
-            Registration registration = registrationService.setClient(time, day, clientId);
-            registrationService.save(registration);
-            return "registration success";
+            RegistrationsDto registration = registrationService
+                    .save(registrationService.setClient(time, day, clientId, barberId));
+
+            return new ResponseEntity<>(registration, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return e.getMessage();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -49,14 +54,15 @@ public class RegistrationController {
      */
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)
     @ResponseBody
-    public String cancel(@RequestParam(name = "time") LocalTime time,
+    public ResponseEntity<RegistrationsDto>  cancel(
+                         @RequestParam(name = "time") LocalTime time,
                          @RequestParam(name = "day") LocalDate day) {
         try {
-            registrationService.canceled(time,day);
-            return "Registration canceled";
+            RegistrationsDto registration = registrationService.canceled(time,day);
+            return new ResponseEntity<>(registration, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return e.getMessage();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }

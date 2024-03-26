@@ -62,7 +62,4 @@ public class InformationController {
         return Json;
 
     }
-
-
-
 }

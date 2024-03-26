@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -38,4 +39,11 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+    @ManyToMany
+    @JoinTable(
+            name = "ordered_amenities",
+            joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id")
+    )
+    private List<Amenities> amenitiesList;
 }

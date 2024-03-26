@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_column-registration-table
+      author: David
+      changes:
+        - addColumn:
+            tableName: registrations
+            columns:
+              - column:
+                  name: barber_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: barber_fk_id
+                    referencedTableName: barber
+                    referencedColumnNames: id

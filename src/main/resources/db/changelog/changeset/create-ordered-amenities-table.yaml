@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-ordered_amenities
+      author: David
+      changes:
+        - createTable:
+            tableName: ordered_amenities
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: order_fk_id
+                    referencedTableName: orders
+                    referencedColumnNames: id
+              - column:
+                  name: amenities_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: amenities_fk_id
+                    referencedTableName: amenities
+                    referencedColumnNames: id

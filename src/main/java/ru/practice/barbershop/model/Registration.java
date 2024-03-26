@@ -30,6 +30,9 @@ public class Registration {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+    @ManyToOne
+    @JoinColumn(name = "barber_id")
+    private Barber barber;
     private LocalDateTime registrationTime;
     private Boolean canceled;
 }
