@@ -2,8 +2,8 @@ package ru.practice.barbershop.controller;
 
 import lombok.AllArgsConstructor;
 import net.minidev.json.JSONObject;
-import netscape.javascript.JSObject;
 import org.springframework.web.bind.annotation.*;
+import ru.practice.barbershop.general.MyDayOfWeek;
 import ru.practice.barbershop.service.ScheduleService;
 
 import java.util.HashMap;
@@ -47,14 +47,20 @@ public class InformationController {
     )
     @ResponseBody
     public JSONObject scheduleForCurrentDay(@PathVariable(name = "day") String day) {
-        String currentDay = scheduleService.getCurrentDay(day);
         JSONObject Json = new JSONObject();
-        if (currentDay == null) {
-            Json.put(day, "not found");
-            return Json;
+        try {
+            String currentDay = scheduleService.getDay(MyDayOfWeek.valueOf(day.toUpperCase()));
+            if (currentDay == null || currentDay.isEmpty()) {
+                Json.put(day.toLowerCase(), "not found");
+                return Json;
+            }
+            Json.put(day.toLowerCase(), currentDay);
+        } catch (Exception e) {
+            Json.put(day.toLowerCase(), "not found");
+            System.out.println(e.getMessage());
         }
-        Json.put(day, currentDay);
         return Json;
+
     }
 
 

@@ -1,6 +1,6 @@
 package ru.practice.barbershop.service;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practice.barbershop.general.MyDayOfWeek;
 import ru.practice.barbershop.repository.ScheduleRepository;
@@ -12,19 +12,13 @@ import java.util.HashMap;
  * This is service class for maintain the schedule
  */
 @Service
-@AllArgsConstructor
 public class ScheduleService {
-
 
     private final ScheduleRepository scheduleRepository;
 
-    //TODO подумать как можно преобразовать строку в MyDayOfWeek.param
-    /**
-     * This is a function to get the current day
-     * @Param day The <code>String</code> variable witch represents the day of the week
-     */
-    public String getCurrentDay(String day) {
-        return getScheduleOfWeek().get(day.toLowerCase());
+    @Autowired
+    public ScheduleService(ScheduleRepository scheduleRepository) {
+        this.scheduleRepository = scheduleRepository;
     }
 
     /**
@@ -34,16 +28,41 @@ public class ScheduleService {
 
         HashMap<String, String> schedule = new HashMap<>();
 
-        schedule.put("monday", scheduleRepository.getDay(MyDayOfWeek.monday));
-        schedule.put("tuesday", scheduleRepository.getDay(MyDayOfWeek.tuesday));
-        schedule.put("wednesday", scheduleRepository.getDay(MyDayOfWeek.wednesday));
-        schedule.put("thursday", scheduleRepository.getDay(MyDayOfWeek.thursday));
-        schedule.put("friday", scheduleRepository.getDay(MyDayOfWeek.friday));
-        schedule.put("saturday", scheduleRepository.getDay(MyDayOfWeek.saturday));
-        schedule.put("sunday", scheduleRepository.getDay(MyDayOfWeek.sunday));
+        schedule.put("monday", getDay(MyDayOfWeek.MONDAY));
+        schedule.put("tuesday", getDay(MyDayOfWeek.TUESDAY));
+        schedule.put("wednesday", getDay(MyDayOfWeek.WEDNESDAY));
+        schedule.put("thursday", getDay(MyDayOfWeek.THURSDAY));
+        schedule.put("friday", getDay(MyDayOfWeek.FRIDAY));
+        schedule.put("saturday", getDay(MyDayOfWeek.SATURDAY));
+        schedule.put("sunday", getDay(MyDayOfWeek.SUNDAY));
 
         return schedule;
     }
+
+    /**
+     * Get schedule for current day from properties file
+     */
+    public String getDay(MyDayOfWeek dayOfWeek) {
+
+        String mondayStart= scheduleRepository.getProperties().getProperty("week." + dayOfWeek.toString().toLowerCase() +".start");
+        String mondayEnd= scheduleRepository.getProperties().getProperty("week." + dayOfWeek.toString().toLowerCase() + ".end");
+        String day;
+
+        if(mondayStart != null && mondayEnd != null) {
+
+            if (mondayStart.equals("none") || mondayEnd.equals("none")) {
+                day = "Weekend";
+            } else {
+                day = mondayStart + "-" + mondayEnd;
+            }
+
+            return day;
+        }
+        else {
+            throw new RuntimeException("Application url not specified in the config.properties file.");
+        }
+    }
+
 
 
 

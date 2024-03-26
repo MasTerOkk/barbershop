@@ -28,7 +28,7 @@ public class Registration {
     private String clientName;
     private String phone;
     @ManyToOne
-    @JoinColumn(name = "clientId")
+    @JoinColumn(name = "client_id")
     private Client client;
     private LocalDateTime registrationTime;
     private Boolean canceled;
