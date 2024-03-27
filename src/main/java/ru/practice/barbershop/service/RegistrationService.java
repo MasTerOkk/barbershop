@@ -2,6 +2,7 @@ package ru.practice.barbershop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practice.barbershop.dto.RegistrationsDto;
 import ru.practice.barbershop.mapper.RegistrationsMapper;
 import ru.practice.barbershop.model.Barber;
@@ -39,12 +40,13 @@ public class RegistrationService {
      * @param dto Registration dto object
      * @throws RuntimeException Registration has already been created
      */
+    @Transactional
     public RegistrationsDto save(RegistrationsDto dto) throws RuntimeException {
 
         Registration entity = RegistrationsMapper.toEntity(dto);
 
         List<Registration> registrationList = registrationRepository.
-                getRegistrationsByTimeAndDay(entity.getTime(),entity.getDay());
+                getRegistrationsByTimeAndDayAndBarber(entity.getTime(),entity.getDay(), entity.getBarber());
 
         for (Registration registration: registrationList) {
             if (!registration.getCanceled()) {
@@ -61,11 +63,14 @@ public class RegistrationService {
      * Cancel registration
      * @param time The time of registration
      * @param date The date of registration
+     * @param barberId Barber
      * @throws RuntimeException Registration not found
      */
-    public RegistrationsDto canceled(LocalTime time, LocalDate date) throws RuntimeException {
+    @Transactional
+    public RegistrationsDto canceled(LocalTime time, LocalDate date, Long barberId) throws RuntimeException {
+
         List<Registration> registrationList = registrationRepository.
-                getRegistrationsByTimeAndDay(time,date);
+                getRegistrationsByTimeAndDayAndBarber(time,date,barberService.getEntityById(barberId));
         if (registrationList != null) {
             for (Registration registration: registrationList) {
                 if (!registration.getCanceled()) {

@@ -2,6 +2,8 @@ package ru.practice.barbershop.controller;
 
 import lombok.AllArgsConstructor;
 import net.minidev.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practice.barbershop.general.MyDayOfWeek;
 import ru.practice.barbershop.service.ScheduleService;
@@ -60,6 +62,38 @@ public class InformationController {
             System.out.println(e.getMessage());
         }
         return Json;
-
+    }
+    /**
+     * Update schedule from newSchedule.properties file
+     */
+    @RequestMapping (
+            path = "/schedule/update",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public ResponseEntity<?> scheduleUpdate() {
+        try {
+            scheduleService.newSchedule();
+            return ResponseEntity.status(HttpStatus.OK).body("Success");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    /**
+     * Get up-to-date info for barbershop
+     */
+    @RequestMapping (
+            path = "/schedule/info",
+            method = RequestMethod.GET
+    )
+    @ResponseBody
+    public ResponseEntity<?> barbershopInfo() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(scheduleService.getInfoOfBarbershop());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

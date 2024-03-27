@@ -2,6 +2,9 @@ package ru.practice.barbershop.dto;
 
 import lombok.Data;
 
+/**
+ * Client dto for Client entity
+ */
 @Data
 public class ClientDto {
     private Long id;

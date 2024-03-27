@@ -1,31 +1,30 @@
 package ru.practice.barbershop.repository;
 
 import lombok.Getter;
-import org.springframework.stereotype.Repository;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 /**
  * This is repository class for up-to-date information from properties file
  */
-@Repository
 @Getter
 public class ScheduleRepository {
 
-    private final Properties properties;
+    private Properties properties;
 
-    public ScheduleRepository() {
+    /**
+     * Set property from file
+     * @param file properties file name
+     */
+    public void setProperties(String file) {
         // Path to the prop file
-        String configFilePath = "src/main/resources/schedule.properties";
+        String configFilePath = "src/main/resources/" + file;
         File ConfigFile=new File(configFilePath);
         try {
             FileInputStream configFileReader=new FileInputStream(ConfigFile);
-            properties = new Properties();
+            this.properties = new Properties();
             try {
-                properties.load(configFileReader);
+                this.properties.load(configFileReader);
                 configFileReader.close();
             } catch (IOException e)
             {
@@ -37,4 +36,29 @@ public class ScheduleRepository {
             throw new RuntimeException("config.properties not found at config file path " + configFilePath);
         }
     }
+
+    /**
+     * Upload new data to properties file
+     * @param file properties file name
+     */
+    public void uploadProperties(String file) {
+        // Path to the prop file
+        String configFilePath = "src/main/resources/" + file;
+        File ConfigFile = new File (configFilePath);
+        try {
+            FileOutputStream configFileReader = new FileOutputStream(ConfigFile);
+            try {
+                this.properties.store(configFileReader, "Updated property value");
+                configFileReader.close();
+            } catch (IOException e)
+            {
+                System.out.println(e.getMessage());
+            }
+        }  catch (FileNotFoundException e)
+        {
+            System.out.println(e.getMessage());
+            throw new RuntimeException("config.properties not found at config file path " + configFilePath);
+        }
+    }
+
 }

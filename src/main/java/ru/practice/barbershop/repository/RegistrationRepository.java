@@ -3,6 +3,7 @@ package ru.practice.barbershop.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.model.Registration;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public interface RegistrationRepository extends JpaRepository<Registration, Long
      * @param day day of registration
      * @return List registrations
      */
-    List<Registration> getRegistrationsByTimeAndDay(LocalTime time, LocalDate day);
+    List<Registration> getRegistrationsByTimeAndDayAndBarber(LocalTime time, LocalDate day, Barber barber);
 
 
 }

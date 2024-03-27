@@ -2,6 +2,7 @@ package ru.practice.barbershop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practice.barbershop.dto.BarberDto;
 import ru.practice.barbershop.mapper.BarberMapper;
 import ru.practice.barbershop.model.Barber;
@@ -20,6 +21,7 @@ public class BarberService {
      * @param id entity id
      * @return Barber dto
      */
+
     public BarberDto getDtoById(Long id) {
         return BarberMapper.toDto(barberRepository.getBarberById(id)
                 .orElseThrow(() -> new RuntimeException("Barber with id=" + id + " not found.")));
@@ -30,6 +32,7 @@ public class BarberService {
      * @param id entity id
      * @return Barber entity
      */
+
     public Barber getEntityById(Long id) {
         return barberRepository.getBarberById(id)
                 .orElseThrow(() -> new RuntimeException("Barber with id=" + id + " not found."));
@@ -39,6 +42,7 @@ public class BarberService {
      * Save or change entity in db
      * @param dto entity object
      */
+    @Transactional
     public BarberDto save(BarberDto dto) {
         Barber savedBarber = barberRepository.save(BarberMapper.toEntity(dto));
         return BarberMapper.toDto(savedBarber);

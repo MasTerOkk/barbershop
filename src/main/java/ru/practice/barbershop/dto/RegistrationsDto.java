@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * Registrations dto for Registrations entity
+ */
 @Data
 public class RegistrationsDto {
     private Long id;

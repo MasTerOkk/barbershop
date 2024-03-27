@@ -5,6 +5,9 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Order dto for Order entity
+ */
 @Data
 public class OrderDto {
     private Long id;

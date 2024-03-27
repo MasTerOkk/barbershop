@@ -3,6 +3,9 @@ package ru.practice.barbershop.dto;
 import lombok.Data;
 import ru.practice.barbershop.general.BarberStatus;
 
+/**
+ * Barber dto for Barber entity
+ */
 @Data
 public class BarberDto {
     private Long id;

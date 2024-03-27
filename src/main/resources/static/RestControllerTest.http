@@ -1,8 +1,8 @@
-POST http://localhost:8080/reg/registration?clientId=1&barberId=11&time=12:30&day=2024-01-01
+POST http://localhost:8080/reg/registration?clientId=1&barberId=13&time=13:00&day=2024-01-01
 Content-Type: application/x-www-form-urlencoded
 
 ###
-POST http://localhost:8080/reg/cancel?time=12:30&day=2024-01-01
+GET http://localhost:8080/reg/cancel?time=13:00&day=2024-01-01&barberId=13
 
 ###
 POST http://localhost:8080/barber/create
