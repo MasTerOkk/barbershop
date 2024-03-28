@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practice.barbershop.dto.RegistrationsDto;
+import ru.practice.barbershop.general.MyService;
 import ru.practice.barbershop.mapper.RegistrationsMapper;
 import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.model.Client;
@@ -14,13 +15,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This is service class for maintain the registration entity
  */
 @Service
 @AllArgsConstructor
-public class RegistrationService {
+public class RegistrationService implements MyService<RegistrationsDto, Registration> {
     private final RegistrationRepository registrationRepository;
     private final ClientService clientService;
     private final BarberService barberService;
@@ -29,9 +31,21 @@ public class RegistrationService {
      * @param id entity id
      * @return Registration entity
      */
-    public Registration getById(Long id) {
+    @Override
+    public Registration getEntityById(Long id) {
         return registrationRepository.getRegistrationById(id)
                 .orElseThrow(() -> new RuntimeException("Registration with id=" + id + " not found."));
+    }
+
+    /**
+     * Return Registration dto by his id
+     * @param id ID
+     * @return Registration dto
+     */
+    @Override
+    public RegistrationsDto getDtoById(Long id) {
+        return RegistrationsMapper.toDto(registrationRepository.getRegistrationById(id)
+                .orElseThrow(() -> new RuntimeException("Registration with id=" + id + " not found.")));
     }
 
 
@@ -40,9 +54,10 @@ public class RegistrationService {
      * @param dto Registration dto object
      * @throws RuntimeException Registration has already been created
      */
+    @Override
     @Transactional
-    public RegistrationsDto save(RegistrationsDto dto) throws RuntimeException {
-
+    public RegistrationsDto save(RegistrationsDto dto) {
+        dto.setId(null);
         Registration entity = RegistrationsMapper.toEntity(dto);
 
         List<Registration> registrationList = registrationRepository.
@@ -57,6 +72,18 @@ public class RegistrationService {
 
         Registration registration = registrationRepository.save(entity);
         return RegistrationsMapper.toDto(registration);
+    }
+
+    @Override
+    public RegistrationsDto update(RegistrationsDto dto) {
+        return RegistrationsMapper.toDto(registrationRepository.save(RegistrationsMapper.toEntity(dto)));
+    }
+
+    @Override
+    public List<RegistrationsDto> getAllDto() {
+        List<Registration> registrations = registrationRepository.findAll();
+        return registrations.stream().map(RegistrationsMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -86,7 +113,7 @@ public class RegistrationService {
     }
 
     /**
-     * For link Registration to Client, Barber and get basic initialization
+     * For link Registration to Client, Barber and set basic initialization
      * @param time The time of registration
      * @param date The date of registration
      * @param clientId The client who registering

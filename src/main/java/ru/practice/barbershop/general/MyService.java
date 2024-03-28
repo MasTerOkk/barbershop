@@ -1,29 +1,46 @@
 package ru.practice.barbershop.general;
 
 
+import java.util.List;
+
 /**
  * This is interface witch represents general logic of service
- * @param <T> entity
+ * @param <D> dto
+ * @param <E> entity
  */
-public interface MyService<T> {
+public interface MyService<D,E> {
 
-//    /**
-//     * Get entity with all collections
-//     * @param id entity id
-//     * @return Entity
-//     */
-//    T getByIdAllCollections(Long id);
+
     /**
-     * Get entity without collections
+     * Get entity
      * @param id entity id
      * @return Entity
      */
-    T getById(Long id);
+    D getDtoById(Long id);
 
     /**
-     * Save or update entity to database
-     * @param entity entity object
+     * Get entity
+     * @param id entity id
+     * @return Entity
      */
-    void save(T entity) throws RuntimeException;
+    E getEntityById(Long id);
+
+    /**
+     * Save dto in database
+     * @param dto object
+     */
+    D save(D dto);
+
+    /**
+     * Update dto in database
+     * @param dto object
+     */
+    D update(D dto);
+
+    /**
+     * Get list of dto
+     * @return List of dto
+     */
+    List<D> getAllDto();
 
 }

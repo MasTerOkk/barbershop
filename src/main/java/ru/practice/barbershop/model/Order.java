@@ -39,7 +39,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "ordered_amenities",
             joinColumns = @JoinColumn(name = "id"),

@@ -17,6 +17,7 @@ databaseChangeLog:
                   name: order_id
                   type: bigint
                   constraints:
+                    nullable: true
                     foreignKeyName: order_fk_id
                     referencedTableName: orders
                     referencedColumnNames: id
@@ -24,6 +25,7 @@ databaseChangeLog:
                   name: amenities_id
                   type: bigint
                   constraints:
+                    nullable: true
                     foreignKeyName: amenities_fk_id
                     referencedTableName: amenities
                     referencedColumnNames: id

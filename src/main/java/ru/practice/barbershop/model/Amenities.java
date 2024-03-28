@@ -25,7 +25,7 @@ public class Amenities {
     @JoinTable(
             name = "ordered_amenities",
             joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
+            inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
     private List<Order> orderList;
 }
