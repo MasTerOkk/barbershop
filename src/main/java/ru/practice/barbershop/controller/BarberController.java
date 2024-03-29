@@ -41,7 +41,7 @@ public class BarberController {
      * @param status new status for Barber
      * @return Answer
      */
-    @RequestMapping(value = "/change", method = RequestMethod.GET)
+    @RequestMapping(value = "/change", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<BarberDto> changeStatus (
             @RequestParam(name = "id") Long id,
@@ -50,7 +50,7 @@ public class BarberController {
         try {
             BarberDto barber = barberService.getDtoById(id);
             barber.setBarberStatus(BarberStatus.valueOf(status.toUpperCase()));
-            barberService.save(barber);
+            barberService.update(barber);
             return new ResponseEntity<>(barber, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());

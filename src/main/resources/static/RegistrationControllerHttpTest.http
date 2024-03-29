@@ -1,0 +1,14 @@
+### Create new registration
+POST http://localhost:8080/reg/registration
+Content-Type: application/json
+
+{
+  "time": "10:00",
+  "day": "2024-01-01",
+  "client_id": 1,
+  "barber_id": 2
+}
+
+### Cancel registration
+PUT http://localhost:8080/reg/cancel?day=2024-01-01&time=10:00&barberId=2
+Content-Type: application/x-www-form-urlencoded

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practice.barbershop.dto.RegistrationsDto;
 import ru.practice.barbershop.general.MyService;
 import ru.practice.barbershop.mapper.RegistrationsMapper;
-import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.model.Client;
 import ru.practice.barbershop.model.Registration;
 import ru.practice.barbershop.repository.RegistrationRepository;
@@ -75,6 +74,7 @@ public class RegistrationService implements MyService<RegistrationsDto, Registra
     }
 
     @Override
+    @Transactional
     public RegistrationsDto update(RegistrationsDto dto) {
         return RegistrationsMapper.toDto(registrationRepository.save(RegistrationsMapper.toEntity(dto)));
     }
@@ -102,7 +102,7 @@ public class RegistrationService implements MyService<RegistrationsDto, Registra
             for (Registration registration: registrationList) {
                 if (!registration.getCanceled()) {
                     registration.setCanceled(Boolean.TRUE);
-                    registrationRepository.save(registration);
+                    update(RegistrationsMapper.toDto(registration));
                     return RegistrationsMapper.toDto(registration);
                 }
             }
@@ -114,26 +114,18 @@ public class RegistrationService implements MyService<RegistrationsDto, Registra
 
     /**
      * For link Registration to Client, Barber and set basic initialization
-     * @param time The time of registration
-     * @param date The date of registration
-     * @param clientId The client who registering
-     * @param barberId The barber
      * @return RegistrationDto obj link to the client and barber
      */
-    public RegistrationsDto setClient(LocalTime time, LocalDate date, Long clientId, Long barberId) {
-        Client client = clientService.getEntityById(clientId);
-        Barber barber = barberService.getEntityById(barberId);
-        Registration registration = new Registration();
+    public RegistrationsDto setClient(RegistrationsDto registration) {
+        Client client = clientService.getEntityById(registration.getClient_id());
 
-        registration.setClient(client);
-        registration.setBarber(barber);
+        registration.setClient_id(registration.getClient_id());
+        registration.setBarber_id(registration.getBarber_id());
         registration.setRegistrationTime(LocalDateTime.now());
         registration.setPhone(client.getPhone());
         registration.setClientName(client.getName());
         registration.setCanceled(Boolean.FALSE);
-        registration.setDay(date);
-        registration.setTime(time);
 
-        return RegistrationsMapper.toDto(registration);
+        return registration;
     }
 }

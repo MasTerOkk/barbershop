@@ -1,0 +1,11 @@
+### Get schedule on this week
+GET http://localhost:8080/info/schedule
+
+### Get schedule for currend day
+GET http://localhost:8080/info/schedule/monday
+
+### Update schedule from newSchedule.properties file
+GET http://localhost:8080/info/schedule/update
+
+### Get info of barbershop
+GET http://localhost:8080/info/schedule/info

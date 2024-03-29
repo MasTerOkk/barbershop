@@ -1,0 +1,11 @@
+### Add new amenity
+POST http://localhost:8080/amenity/add
+Content-Type: application/json
+
+{
+  "price": 1111,
+  "name": "Cut hair+"
+}
+
+### Return avg price of all amenities
+GET http://localhost:8080/amenity/avg

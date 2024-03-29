@@ -82,6 +82,7 @@ public class OrderService implements MyService<OrderDto, Order> {
         }
         if (!flag) {
             List<Order> orders = amenity.getOrderList();
+
             orders.add(order);
             amenity.setOrderList(orders);
             amenitiesService.updateEntity(amenity);
@@ -90,6 +91,8 @@ public class OrderService implements MyService<OrderDto, Order> {
             order.setAmenitiesList(amenities);
 
             updateEntity(order);
+
+            order.setPrice(order.getPrice() + amenity.getPrice());
         } else {
             throw new RuntimeException("Order with id=" + orderId + " already contains amenity with id=" + amenityId);
         }
@@ -110,7 +113,7 @@ public class OrderService implements MyService<OrderDto, Order> {
     }
 
     public Double avgRate(BarberDto barber) {
-        double avgRate = 0D;
+        double avgRate = 0;
         int count = 0;
 
         List<Order> orders = orderRepository.getByBarbers(barber.getId());

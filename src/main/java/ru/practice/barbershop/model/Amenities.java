@@ -21,11 +21,7 @@ public class Amenities {
     private Long id;
     private Integer price;
     private String name;
-    @ManyToMany
-    @JoinTable(
-            name = "ordered_amenities",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "amenity_id")
-    )
+    @ManyToMany(fetch = FetchType.EAGER,
+                mappedBy = "amenitiesList")
     private List<Order> orderList;
 }

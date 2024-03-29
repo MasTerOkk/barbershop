@@ -42,8 +42,8 @@ public class Order {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "ordered_amenities",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id")
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "amenities_id")
     )
     private List<Amenities> amenitiesList;
 }
