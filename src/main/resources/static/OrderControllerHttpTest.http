@@ -1,8 +1,8 @@
 ### Create order
-GET http://localhost:8080/order/create/reg?regId=13
+GET http://localhost:8080/order/create/reg?regId=15
 
 ### Set mark for order
-GET http://localhost:8080/order/mark?mark=4&orderId=1
+GET http://localhost:8080/order/mark?mark=6&orderId=1
 
 ### Get avg rating for current barber
 GET http://localhost:8080/order/average-rating?barberId=2

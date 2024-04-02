@@ -90,7 +90,9 @@ public class ScheduleService {
             //initialize repos
             ScheduleRepository scheduleRepository = new ScheduleRepository();
             scheduleRepository.setProperties("schedule.properties");
+            for (MyDayOfWeek day : MyDayOfWeek.values()) {
 
+            }
             ScheduleRepository newScheduleRepository = new ScheduleRepository();
             newScheduleRepository.setProperties("newSchedule.properties");
             // Hard code. Get every property

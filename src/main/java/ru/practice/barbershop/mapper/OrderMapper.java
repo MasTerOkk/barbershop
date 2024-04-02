@@ -6,7 +6,6 @@ import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.model.Client;
 import ru.practice.barbershop.model.Order;
 
-@AllArgsConstructor
 public class OrderMapper {
     public static OrderDto toDto(Order entity) {
         OrderDto order = new OrderDto();

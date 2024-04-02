@@ -6,7 +6,6 @@ import ru.practice.barbershop.model.Barber;
 import ru.practice.barbershop.model.Client;
 import ru.practice.barbershop.model.Registration;
 
-@Service
 public class RegistrationsMapper {
     public static RegistrationsDto toDto(Registration entity) {
         RegistrationsDto registrations = new RegistrationsDto();

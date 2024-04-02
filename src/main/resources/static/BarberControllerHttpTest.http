@@ -3,8 +3,8 @@ POST http://localhost:8080/barber/create
 Content-Type: application/json
 
 {
-  "phone": "barberPhone",
-  "email": "barberEmail",
+  "phone": "barberPhoneNew",
+  "email": "barberEmailNew",
   "barberStatus": "WORK"
 }
 
